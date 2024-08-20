@@ -1,0 +1,35 @@
+
+# Created by Abdullah on 20/8/24.
+
+
+flavors:
+  dev:
+    app:
+      name: "Shield App Dev"
+
+    android:
+      applicationId: "com.privacy.shield"
+    ios:
+      bundleId: "com.privacy.shield"
+    macos:
+      bundleId: "com.privacy.shield"
+  uat:
+    app:
+      name: "Shield App Uat"
+
+    android:
+      applicationId: "com.privacy.shield"
+    ios:
+      bundleId: "com.privacy.shield"
+    macos:
+      bundleId: "com.privacy.shield"
+  prod:
+    app:
+      name: "Shield App prod"
+
+    android:
+      applicationId: "com.privacy.shield"
+    ios:
+      bundleId: "com.privacy.shield"
+    macos:
+      bundleId: "com.privacy.shield"
