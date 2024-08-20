@@ -1,0 +1,7 @@
+#include "../../Flutter/uatProfile.xcconfig"
+#include "Warnings.xcconfig"
+
+FLUTTER_TARGET=lib/main_uat.dart
+ASSET_PREFIX=uat
+BUNDLE_NAME=Shield App Uat
+BUNDLE_DISPLAY_NAME=Shield App Uat
