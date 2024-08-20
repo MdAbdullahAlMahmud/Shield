@@ -1,8 +1,19 @@
-import 'flavors.dart';
+import 'package:flutter/cupertino.dart';
 
-import 'main.dart' as runner;
+import 'app.dart';
+import 'core/di/di_setup.dart';
+import 'flavors/app_properties.dart';
+import 'flavors/flavor_config.dart';
 
 Future<void> main() async {
-  F.appFlavor = Flavor.dev;
-  await runner.main();
+  AppProperties.appFlavor = Flavor.DEV;
+
+  FlavorConfig.instantiate(
+      flavor: Flavor.DEV,
+      name: "Shield App Dev",
+      url: "https://dev.example.com"
+  );
+
+  setupDependencies();
+  runApp(const App());
 }
