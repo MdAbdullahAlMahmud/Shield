@@ -1,15 +1,23 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '12.0'
+platform :ios, '12.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
+# Project configurations for different build configurations
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
   'Release' => :release,
+  'Debug-dev' => :debug,
+  'Release-dev' => :release,
+  'Debug-uat' => :debug,
+  'Release-uat' => :release,
+  'Debug-prod' => :debug,
+  'Release-prod' => :release,
 }
 
+# Function to find the Flutter root directory
 def flutter_root
   generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
   unless File.exist?(generated_xcode_build_settings_path)
@@ -23,20 +31,35 @@ def flutter_root
   raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
 end
 
+# Include the Flutter helper script
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 flutter_ios_podfile_setup
 
+# Define the target for the Runner application
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # Install all Flutter-related pods
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # If you have any specific pods for different flavors, you can conditionally include them here
+  if ENV['FLAVOR'] == 'dev'
+    # Pods specific to dev
+  elsif ENV['FLAVOR'] == 'uat'
+    # Pods specific to uat
+  elsif ENV['FLAVOR'] == 'prod'
+    # Pods specific to prod
+  end
+
   target 'RunnerTests' do
     inherit! :search_paths
+    # Pods for testing can be added here
   end
 end
 
+# Post-install hook to add additional build settings
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
