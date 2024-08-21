@@ -41,7 +41,13 @@ showCustomDialog(message,
           ),
           actions: <Widget>[
             if (negativeButtonAction != null)
-              OutlinedButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                ),
                 onPressed: () {
                   AppRoutes.pop();
                 },
@@ -49,7 +55,13 @@ showCustomDialog(message,
                   "Cancel",
                 ),
               ),
-            if(isCancelAble)OutlinedButton(
+            if(isCancelAble)ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
               child: Text(
                 "Ok",
               ),

@@ -1,3 +1,4 @@
+import 'package:shield/core/utils/custom_dialog.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /**
@@ -18,12 +19,18 @@ Future<T> callWithExceptionsHandler<T>(
 
     return response; // Ensure that the response is returned correctly
   } on AuthException catch (e) {
-    print('AuthException:::::: ${e.message}');
+    print('AuthException::::::: ${e}');
+    showCustomDialog(
+        title: 'Error',
+        e.message);
     if (onError != null) {
       onError(e);
     }
     rethrow; // Rethrow the exception so it can be handled further up the call stack
   } on Exception catch (e) {
+    showCustomDialog(
+        title: 'Error',
+        e.toString());
     print('Exception::::::: ${e}');
     if (onError != null) {
       onError(e);

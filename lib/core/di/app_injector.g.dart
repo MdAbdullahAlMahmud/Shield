@@ -11,7 +11,7 @@ class _$AppInjector extends AppInjector {
   void _controllerComponents() {
     final KiwiContainer container = KiwiContainer();
     container
-      ..registerFactory((c) => LoginController())
+      ..registerFactory((c) => LoginController(c.resolve<AuthRepository>()))
       ..registerFactory((c) => SignUpController(c.resolve<AuthRepository>()));
   }
 

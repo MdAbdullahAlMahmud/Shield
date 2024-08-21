@@ -11,9 +11,8 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<AuthResponse> signIn(String email, String password) async {
-    return _client.auth.signInWithPassword(
-      email: email,
-      password: password,
+    return callWithExceptionsHandler(
+      _client.auth.signInWithPassword(email: email, password: password),
     );
   }
 
@@ -24,14 +23,7 @@ class AuthRepositoryImpl extends AuthRepository {
         email: email,
         password: password,
         data: {"name": name},
-      ),
-      onSuccess: (response) {
-        return response; // Optional, as it's already returned from callWithExceptionsHandler
-      },
-      onError: (exception) {
-        // Handle any additional error-specific logic here if needed
-      },
-    );
+      ));
   }
 
 }

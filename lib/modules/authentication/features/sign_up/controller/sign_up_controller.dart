@@ -21,8 +21,7 @@ class SignUpController extends BaseController{
 
   void signUp(){
     if(signUpKey.currentState!.validate()){
-      //requestForSignUp();
-
+      requestForSignUp();
     }
 
 
@@ -32,16 +31,15 @@ class SignUpController extends BaseController{
 
   void requestForSignUp() async {
 
-    showCustomDialog("Sign Up Success");
 
-    /*String name = nameController.text;
+    String name = nameController.text;
     String email = emailController.text;
     String password = passwordController.text;
     final response = await _authRepository.signUp(email, password, name);
     if(response.session != null){
-      print('Sign Up Success');
+      showCustomDialog("Sign Up Success Session: ${response.session?.accessToken ?? ""}");
     }
-    */
+
 
   }
 
