@@ -3,10 +3,9 @@
  */
 import 'package:get_it/get_it.dart';
 
-final GetIt getIt = GetIt.instance;
+import 'app_injector.dart';
+import 'injector.dart';
 
 void setupDependencies() {
-  // Register your dependencies here
-  // Example:
-  // getIt.registerLazySingleton<SomeService>(() => SomeServiceImpl());
+  AppInjector.configure();
 }

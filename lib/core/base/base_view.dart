@@ -5,11 +5,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shield/core/base/base_controller.dart';
+import 'package:shield/core/di/injector.dart';
 import 'package:shield/flavors/app_properties.dart';
 
 /// A base class for all views/screens in the app.
-abstract class BaseView<T extends BaseController> extends StatelessWidget {
-  const BaseView({Key? key}) : super(key: key);
+abstract class BaseView<B extends BaseController> extends StatelessWidget {
+  B controller = Injector.resolve<B>();
+
+   BaseView({Key? key}) : super(key: key);
 
   /// Creates the view's widget.
   Widget body(BuildContext context);

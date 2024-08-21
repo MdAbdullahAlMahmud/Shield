@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shield/core/di/injector.dart';
 import 'package:shield/flavors/app_properties.dart';
 
 import 'base_controller.dart';
@@ -11,6 +12,7 @@ import 'base_controller.dart';
 
 abstract class BaseViewState<S extends StatefulWidget, B extends BaseController> extends State<S> {
 
+  B controller = Injector.resolve<B>();
   Widget body(BuildContext context);
 
   @override
