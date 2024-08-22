@@ -2,14 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:shield/core/base/base_controller.dart';
 import 'package:shield/core/utils/custom_dialog.dart';
 import 'package:shield/modules/authentication/data/repository/auth_repository.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /**
  * Created by Abdullah on 20/8/24.
  */
 
 class SignUpController extends BaseController{
-  final SupabaseClient _client = Supabase.instance.client;
   final GlobalKey<FormState> signUpKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -23,8 +21,6 @@ class SignUpController extends BaseController{
     if(signUpKey.currentState!.validate()){
       requestForSignUp();
     }
-
-
   }
 
 

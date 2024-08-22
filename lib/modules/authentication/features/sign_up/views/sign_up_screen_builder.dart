@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shield/core/base/base_view.dart';
 import 'package:shield/core/base/base_view_state.dart';
 import 'package:shield/modules/authentication/features/sign_up/controller/sign_up_controller.dart';
 import 'package:shield/router/app_routes.dart';
@@ -46,7 +44,8 @@ class _SignUpScreenBuilderState extends BaseViewState<SignUpScreenBuilder, SignU
 
                 // Name Field
                 TextField(
-                  decoration: InputDecoration(
+                controller: controller.nameController,
+                decoration: InputDecoration(
                     labelText: 'Full Name',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -59,7 +58,8 @@ class _SignUpScreenBuilderState extends BaseViewState<SignUpScreenBuilder, SignU
 
                 // Email Field
                 TextField(
-                  decoration: InputDecoration(
+                controller: controller.emailController,
+                decoration: InputDecoration(
                     labelText: 'Email Address',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
@@ -72,7 +72,8 @@ class _SignUpScreenBuilderState extends BaseViewState<SignUpScreenBuilder, SignU
 
                 // Password Field
                 TextField(
-                  obscureText: true,
+                controller: controller.passwordController,
+                obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     border: OutlineInputBorder(

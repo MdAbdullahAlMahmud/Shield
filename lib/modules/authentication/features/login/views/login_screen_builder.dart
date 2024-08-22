@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shield/core/base/base_view_state.dart';
 import 'package:shield/modules/authentication/features/login/controller/login_controller.dart';
@@ -45,6 +44,7 @@ class _LoginScreenBuilderState
 
               // Email Field
               TextField(
+                controller: controller.emailController,
                 decoration: InputDecoration(
                   labelText: 'Email Address',
                   border: OutlineInputBorder(
@@ -58,6 +58,7 @@ class _LoginScreenBuilderState
 
               // Password Field
               TextField(
+                controller: controller.passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',

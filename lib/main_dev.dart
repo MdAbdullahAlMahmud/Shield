@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app.dart';
@@ -17,10 +18,11 @@ Future<void> main() async {
 
   setupDependencies();
 
+  await dotenv.load(fileName: "assets/.env");
   // Initialize Supabase
   await Supabase.initialize(
-    url: 'https://tbngqxyijhtywlcgatas.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRibmdxeHlpamh0eXdsY2dhdGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQxNTQ2MDcsImV4cCI6MjAzOTczMDYwN30.d10dq_67KfvpjrQNDIhgRBmbgiDOhd4-fJtWeH4oPGU',
+    url: dotenv.env['url']!,
+    anonKey: dotenv.env['anonKey']!,
   );
 
   runApp(const App());
