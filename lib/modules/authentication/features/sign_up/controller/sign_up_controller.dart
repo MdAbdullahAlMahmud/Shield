@@ -30,15 +30,18 @@ class SignUpController extends BaseController{
 
 
   void requestForSignUp() async {
-
-
     String name = nameController.text;
     String email = emailController.text;
     String password = passwordController.text;
-    final response = await _authRepository.signUp(email, password, name);
-    if(response.session != null){
-      showCustomDialog("Sign Up Success Session: ${response.session?.accessToken ?? ""}");
+    final repo = _authRepository.signUp(email, password, name);
+
+    execute(repo, onSuccess: (response) {
+      showCustomDialog("Sign Up Success: ${response.user?.email ?? ""}");
+    }, onError: () {
+
     }
+    );
+
 
 
   }

@@ -6,26 +6,94 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shield/core/base/base_controller.dart';
 import 'package:shield/core/di/injector.dart';
+import 'package:shield/core/widgets/app_loader.dart';
 import 'package:shield/flavors/app_properties.dart';
+import 'package:get/get.dart';
+
+import 'base_page_state.dart';
 
 /// A base class for all views/screens in the app.
 abstract class BaseView<B extends BaseController> extends StatelessWidget {
   B controller = Injector.resolve<B>();
 
-   BaseView({Key? key}) : super(key: key);
+  GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
+  late BuildContext context;
+  var showBackButton;
 
-  /// Creates the view's widget.
-  Widget body(BuildContext context);
+  BaseView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Use GetBuilder or Obx based on your requirement
+    this.context = context;
+    return wrapScaffold(body(context));
+  }
+
+  Widget body(BuildContext context);
+
+  Widget _getPageContent() {
+    return Padding(padding: setPadding(), child: body(context));
+  }
+
+  PreferredSizeWidget? appBar() {}
+
+  Widget? floatingActionButton() {
+    return null;
+  }
+
+  FloatingActionButtonLocation? floatingActionButtonLocation() {
+    return null;
+  }
+
+  Widget? bottomNavigationBar() {
+    return null;
+  }
+
+  Widget? bottomSheet() {
+    return null;
+  }
+
+  bool resizeToAvoidBottomInset() {
+    return true;
+  }
+
+  Widget? drawer() {
+    return null;
+  }
+
+  Widget setBackground() {
+    return const SizedBox();
+  }
+
+  EdgeInsets setPadding() {
+    return const EdgeInsets.all(8);
+  }
+
+  wrapScaffold(Widget body) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppProperties.title),
+      backgroundColor: Colors.grey[100],
+      drawerEnableOpenDragGesture: false,
+      key: globalKey,
+      extendBodyBehindAppBar: true,
+      appBar: appBar(),
+      floatingActionButton: floatingActionButton(),
+      floatingActionButtonLocation: floatingActionButtonLocation(),
+      bottomNavigationBar: bottomNavigationBar(),
+      bottomSheet: bottomSheet(),
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset(),
+      drawer: drawer(),
+      body: Stack(
+        children: [
+          setBackground(),
+          SafeArea(child: _getPageContent()),
+          Obx(() => controller.pageState == PageState.LOADING
+              ? _showLoader()
+              : const SizedBox()),
+        ],
       ),
-      body: body(context),
     );
   }
 
+  Widget _showLoader() {
+    return const AppLoader();
+  }
 }

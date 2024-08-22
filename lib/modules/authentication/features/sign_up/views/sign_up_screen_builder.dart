@@ -21,9 +21,7 @@ class _SignUpScreenBuilderState extends BaseViewState<SignUpScreenBuilder, SignU
 
   @override
   Widget body(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Center(
+    return  Center(
         child: Form(
           key: controller.signUpKey,
           child: Padding(
@@ -170,7 +168,7 @@ class _SignUpScreenBuilderState extends BaseViewState<SignUpScreenBuilder, SignU
             ),
           ),
         ),
-      ),
+
     );
   }
 }

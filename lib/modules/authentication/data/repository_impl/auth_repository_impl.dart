@@ -11,19 +11,18 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<AuthResponse> signIn(String email, String password) async {
-    return callWithExceptionsHandler(
-      _client.auth.signInWithPassword(email: email, password: password),
-    );
+    return
+      _client.auth.signInWithPassword(email: email, password: password);
+
   }
 
   @override
   Future<AuthResponse> signUp(String email, String password, String name) async {
-    return callWithExceptionsHandler<AuthResponse>(
-      _client.auth.signUp(
+    return _client.auth.signUp(
         email: email,
         password: password,
         data: {"name": name},
-      ));
+      );
   }
 
 }
