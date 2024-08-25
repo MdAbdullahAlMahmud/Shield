@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shield/core/base/base_view_state.dart';
+import 'package:shield/core/constants/app_spaces.dart';
+import 'package:shield/core/theme/color_palettes.dart';
+import 'package:shield/core/widgets/text_filed/input_field.dart';
+import 'package:shield/core/widgets/text_filed/input_regex.dart';
 import 'package:shield/modules/authentication/features/login/controller/login_controller.dart';
 import 'package:shield/router/app_routes.dart';
 import 'package:shield/router/route_path.dart';
@@ -40,37 +44,25 @@ class _LoginScreenBuilderState
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20),
 
-              // Email Field
-              TextField(
+              AppSpaces.spaceBetweenItem,
+              InputField(
                 controller: controller.emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                ),
+                regex: InputRegex.NOT_EMPTY,
+                label: 'Email',
               ),
-              SizedBox(height: 20),
 
-              // Password Field
-              TextField(
+              AppSpaces.spaceBetweenItem,
+
+              InputField(
                 controller: controller.passwordController,
+                label: 'Password',
                 obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: Icon(Icons.visibility_off),
-                ),
+                suffixIcon: Icon(Icons.visibility_off),
+                regex: InputRegex.NOT_EMPTY,
               ),
-              SizedBox(height: 20),
+
+              AppSpaces.spaceBetweenItem,
 
               // Login Button
               ElevatedButton(
@@ -82,7 +74,7 @@ class _LoginScreenBuilderState
                   child: Text('Log In', style: TextStyle(fontSize: 18)),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: ColorPalettes.colorPrimary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

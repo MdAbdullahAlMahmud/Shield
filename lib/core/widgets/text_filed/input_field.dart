@@ -5,8 +5,8 @@ import 'input_regex.dart';
 /**
  * Created by Abdullah on 22/8/24.
  */
+
 class InputField extends TextFormField {
-  final String? header;
   final String? hintText;
   final Function(String?)? onTextChange;
   final InputDecoration? inputDecoration;
@@ -19,9 +19,10 @@ class InputField extends TextFormField {
   final Widget? prefix, suffix, prefixIcon, suffixIcon;
   final EdgeInsets? contentPadding;
   final Color? fillColor;
+  final String? label;
 
-  InputField(
-      {this.header,
+  InputField({
+    this.label,
       this.regex,
       this.hintText,
       this.onTextChange,
@@ -80,24 +81,28 @@ class InputField extends TextFormField {
       this.willShowCounter = false,
       this.hintStyle,
       this.contentPadding,
-      this.fillColor,
+      this.fillColor = Colors.white,
       super.textDirection})
       : super(
           onTapOutside: (PointerDownEvent event) {},
           onChanged: onTextChange != null ? (s) => onTextChange(s) : null,
           decoration: inputDecoration ??
               InputDecoration(
+                label: Text(label ?? ""),
                 hintText: hintText,
                 counterText: willShowCounter ? null : "",
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixIcon,
                 hintStyle: hintStyle,
                 filled: fillColor != null,
-                fillColor: fillColor,
+                fillColor: fillColor ?? Colors.white,
                 prefix: prefix,
                 suffix: suffix,
                 contentPadding: contentPadding ??
                     EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
               ),
           validator: (value) {
             if (isOptional && value!.isEmpty) {
