@@ -40,3 +40,25 @@ lib/
 │   └── kiwi_injection.dart
 ├── main.dart
 └── app.dart
+
+- `core/`: Contains core functionalities, such as API handling, models, services, and utilities.
+- `features/`: Each feature (Chat, Video Call, File Sharing) is modularized within this directory.
+- `injection_container/`: Set up and configure dependency injection using Kiwi.
+- `main.dart`: Entry point of the application.
+- `app.dart`: Central point for setting up the application, routing, and theme.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Flutter**: Ensure you have Flutter installed on your machine. Follow the official [Flutter installation guide](https://flutter.dev/docs/get-started/install).
+- **Supabase Account**: Create a free account on [Supabase](https://supabase.io/) and set up your project.
+
+### Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/your-username/flutter-chat-app.git
+   cd flutter-chat-app
+
