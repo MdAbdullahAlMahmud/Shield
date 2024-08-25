@@ -1,4 +1,4 @@
-# 📱 Sheild - Flutter Chat App with Real-Time Chat, Video Call, and File Sharing
+# 📱 Shield - Flutter Chat App with Real-Time Chat, Video Call, and File Sharing
 
 Welcome to the **Shield**! This open-source project is a feature-rich mobile application built using Flutter, allowing users to engage in real-time chat, video calls, and file sharing. The project utilizes Supabase and WebSocket to ensure a smooth and responsive user experience, and is designed with scalability and flexibility in mind, thanks to a well-organized architecture and modern Flutter development practices.
 
