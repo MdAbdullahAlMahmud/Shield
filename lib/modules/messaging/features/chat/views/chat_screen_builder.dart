@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
+import 'package:shield/core/widgets/text_filed/input_field.dart';
 
 import '../../../data/services/webrtc_service.dart';
 
@@ -143,11 +144,9 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: TextField(
+                  child: InputField(
                     controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your message...',
-                    ),
+                    hintText: 'Type a message...',
                   ),
                 ),
                 IconButton(
