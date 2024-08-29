@@ -3,6 +3,8 @@ import 'package:shield/modules/authentication/data/repository/auth_repository.da
 import 'package:shield/modules/authentication/data/repository_impl/auth_repository_impl.dart';
 import 'package:shield/modules/authentication/features/login/controller/login_controller.dart';
 import 'package:shield/modules/authentication/features/sign_up/controller/sign_up_controller.dart';
+import 'package:shield/modules/dashboard/features/dahboard/controller/dashboard_controller.dart';
+import 'package:shield/modules/messaging/features/chat_users_list/controller/chat_users_list_controller.dart';
 
 import 'injector.dart';
 
@@ -24,7 +26,8 @@ abstract class AppInjector extends Injector {
     _repositoryComponents();
   }
 
-
+  @Register.factory(ChatUsersListController)
+  @Register.factory(DashboardController)
   @Register.factory(LoginController)
   @Register.factory(SignUpController)
   void _controllerComponents();

@@ -41,4 +41,7 @@ abstract class ColorPalettes{
   static const Color colorBlue = Color(0xFF1976D2);
   static const Color colorBlueLight = Color(0xFFBBDEFB);
   static const Color colorBlueDark = Color(0xFF0D47A1);
+
+  static const Color textColorOnDarkTheme = Color(0xFFE0E0E0);
+  static const Color textColorOnLightTheme = Color(0xFF000000);
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gotrue/src/types/auth_response.dart';
 import 'package:shield/core/base/base_controller.dart';
-import 'package:shield/core/utils/custom_dialog.dart';
+import 'package:shield/core/services/storage/secure_storage.dart';
 import 'package:shield/modules/authentication/data/repository/auth_repository.dart';
+import 'package:shield/router/app_routes.dart';
+import 'package:shield/router/route_path.dart';
 
 /**
  * Created by Abdullah on 20/8/24.
@@ -23,7 +26,12 @@ class SignUpController extends BaseController{
     }
   }
 
-
+  void onSignUpSuccess(AuthResponse response) {
+    if (response.session?.accessToken != null) {
+      SecureStorageService.saveToken(response.session?.accessToken ?? "");
+      AppRoutes.pushAndReplaceNamed(RoutePath.dashboard);
+    }
+  }
 
   void requestForSignUp() async {
     String name = nameController.text;
@@ -32,7 +40,7 @@ class SignUpController extends BaseController{
     final repo = _authRepository.signUp(email, password, name);
 
     execute(repo, onSuccess: (response) {
-      showCustomDialog("Sign Up Success: ${response.user?.email ?? ""}");
+      onSignUpSuccess(response);
     }, onError: () {
 
     }

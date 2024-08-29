@@ -10,7 +10,9 @@ class _$AppInjector extends AppInjector {
   @override
   void _controllerComponents() {
     final KiwiContainer container = KiwiContainer();
-    container
+    container..registerFactory((c) =>
+        ChatUsersListController())..registerFactory((c) =>
+        DashboardController())
       ..registerFactory((c) => LoginController(c.resolve<AuthRepository>()))
       ..registerFactory((c) => SignUpController(c.resolve<AuthRepository>()));
   }
