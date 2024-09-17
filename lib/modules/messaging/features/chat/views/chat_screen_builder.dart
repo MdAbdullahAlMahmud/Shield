@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:shield/core/widgets/text_filed/input_field.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shield/modules/messaging/data/model/message.dart';
+import 'package:shield/modules/messaging/enums/message_type.dart'
+    as MessageTypeEnum;
+import 'package:shield/modules/messaging/widgets/message_widget.dart';
 
 import '../../../data/services/webrtc_service.dart';
 
@@ -17,7 +21,7 @@ class ChatScreenBuilder extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreenBuilder> {
   final WebRTCService _webRTCService = WebRTCService();
   final TextEditingController _messageController = TextEditingController();
-  final List<String> _messages = [];
+  final List<Message> _messages = [];
   final List<String> _logs = [];
   String _connectionStatus = 'Initializing...';
 
@@ -29,7 +33,13 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
 
     _webRTCService.onMessage.listen((message) {
       setState(() {
-        _messages.add(message);
+        _messages.add(Message(
+          message: message,
+          isOwn: false,
+          messageType: MessageTypeEnum.MessageType.TEXT,
+          sent: getMessageSentTime(),
+          read: 'false',
+        ));
       });
     });
 
@@ -61,7 +71,13 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
 
       _webRTCService.onMessage.listen((message) {
         setState(() {
-          _messages.add("Peer: $message");
+          _messages.add(Message(
+            message: message,
+            isOwn: false,
+            messageType: MessageTypeEnum.MessageType.TEXT,
+            sent: getMessageSentTime(),
+            read: 'false',
+          ));
         });
       });
 
@@ -100,12 +116,19 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
     if (message.isNotEmpty) {
       _webRTCService.sendMessage(message);
       setState(() {
-        _messages.add("You: $message");
+        _messages.add(Message(
+          message: message,
+          isOwn: true,
+          messageType: MessageTypeEnum.MessageType.TEXT,
+          sent: getMessageSentTime(),
+          read: 'false',
+        ));
       });
       _messageController.clear();
     }
   }
 
+  bool _showEmoji = false, _isUploading = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -139,23 +162,7 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: InputField(
-                    controller: _messageController,
-                    hintText: 'Type a message...',
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: _sendMessage,
-                ),
-              ],
-            ),
-          ),
+          _chatInput(MediaQuery.of(context).size),
         ],
       ),
     );
@@ -166,7 +173,7 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
       itemCount: _messages.length,
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(_messages[index]),
+          title: MessageWidget(message: _messages[index]),
         );
       },
     );
@@ -188,5 +195,96 @@ class _ChatScreenState extends State<ChatScreenBuilder> {
     _messageController.dispose();
     _webRTCService.dispose();
     super.dispose();
+  }
+
+  String getMessageSentTime() {
+    return DateTime.now().millisecondsSinceEpoch.toString();
+  }
+
+  Widget _chatInput(Size mq) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: mq.height * .01, horizontal: mq.width * .025),
+      child: Row(
+        children: [
+          //input field & buttons
+          Expanded(
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              child: Row(
+                children: [
+                  //emoji button
+                  IconButton(
+                      onPressed: () {
+                        FocusScope.of(context).unfocus();
+                        setState(() => _showEmoji = !_showEmoji);
+                      },
+                      icon: const Icon(Icons.emoji_emotions,
+                          color: Colors.blueAccent, size: 25)),
+
+                  Expanded(
+                      child: TextField(
+                    controller: _messageController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    onTap: () {
+                      if (_showEmoji) setState(() => _showEmoji = !_showEmoji);
+                    },
+                    decoration: const InputDecoration(
+                        hintText: 'Type Something...',
+                        hintStyle: TextStyle(color: Colors.blueAccent),
+                        border: InputBorder.none),
+                  )),
+
+                  //pick image from gallery button
+                  IconButton(
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+
+                        // Picking multiple images
+                        final List<XFile> images =
+                            await picker.pickMultiImage(imageQuality: 70);
+                      },
+                      icon: const Icon(Icons.image,
+                          color: Colors.blueAccent, size: 26)),
+
+                  //take image from camera button
+                  IconButton(
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+
+                        // Pick an image
+                        final XFile? image = await picker.pickImage(
+                            source: ImageSource.camera, imageQuality: 70);
+                        if (image != null) {
+                          _logs.add('Image Path: ${image.path}');
+                        }
+                      },
+                      icon: const Icon(Icons.camera_alt_rounded,
+                          color: Colors.blueAccent, size: 26)),
+
+                  //adding some space
+                  SizedBox(width: mq.width * .02),
+                ],
+              ),
+            ),
+          ),
+
+          //send message button
+          MaterialButton(
+            onPressed: () {
+              _sendMessage();
+            },
+            minWidth: 0,
+            padding:
+                const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
+            shape: const CircleBorder(),
+            color: Colors.green,
+            child: const Icon(Icons.send, color: Colors.white, size: 28),
+          )
+        ],
+      ),
+    );
   }
 }
