@@ -21,7 +21,7 @@ class ChatUsersListController extends BaseController {
   ChatUsersListController(this._chatRepository);
   // Rx Varibales
 
-  RxList users  = RxList([]);
+  var users  =<UserItem>[].obs;
   @override
   void onInit() {
     getAllUserList();
@@ -66,11 +66,22 @@ class ChatUsersListController extends BaseController {
     }, onError: () {});
   }
 
+  void userFilter(List<UserItem> items){
+    final query =Supabase.instance.client.auth.currentUser!.id;
+    var tempUser = <UserItem>[];
+    items.forEach((element) {
+      if(element.uid != query){
+        tempUser.add(element);
+      }
+    });
+    users.value = tempUser;
+
+  }
 
   void getAllUserList(){
     final repo = _chatRepository.getAllUserList();
     execute(repo, onSuccess: (response) {
-      users.value = response;
+     userFilter(response);
     });
   }
 
