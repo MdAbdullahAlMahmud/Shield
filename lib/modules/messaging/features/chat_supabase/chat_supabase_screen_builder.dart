@@ -39,7 +39,7 @@ class _ChatSupabaseScreenBuilderState extends State<ChatSupabaseScreenBuilder> {
         .from('messages')
         .select()
         .eq('chat_room_id', widget.chatRoomId)
-        .order('created_at')
+        .order('created_at', ascending: true) // Change back to ascending order
         .execute();
 
     if (response.data != null) {
@@ -60,7 +60,7 @@ class _ChatSupabaseScreenBuilderState extends State<ChatSupabaseScreenBuilder> {
         .from('messages')
         .stream(primaryKey: ['id'])
         .eq('chat_room_id', widget.chatRoomId)
-        .order('created_at')
+        .order('created_at', ascending: true) // Change back to ascending order
         .map((List<Map<String, dynamic>> data) => data);
 
     _messagesStream.listen((List<Map<String, dynamic>> data) {
