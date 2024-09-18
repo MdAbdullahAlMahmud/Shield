@@ -200,6 +200,7 @@ class _ChatSupabaseScreenBuilderState extends State<ChatSupabaseScreenBuilder> {
               ],
             ),
           ),
+          AppSpaces.spaceBetweenChild
         ],
       ),
     );
