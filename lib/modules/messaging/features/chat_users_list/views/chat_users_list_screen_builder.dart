@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shield/core/base/base_view.dart';
 import 'package:shield/core/constants/app_spaces.dart';
 import 'package:shield/core/widgets/text_filed/app_text.dart';
@@ -54,6 +55,43 @@ class ChatUsersListScreenBuilder extends BaseView<ChatUsersListController> {
             backgroundColor: ColorPalettes.colorAccent,
           ),
         ),
+        ElevatedButton(
+          onPressed: controller.saveUser,
+          child: AppText("Save"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: ColorPalettes.colorAccent,
+          ),
+        ),
+        Expanded(
+          child: Obx(
+            () => ListView.builder(
+                itemBuilder: (context, position) {
+                  return InkWell(
+                    onTap: (){
+                      controller.onUserTap(controller.users.value[position]);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: ColorPalettes.colorAccent,
+                          )
+                        ),
+                        title: AppText(controller.users.value[position].name),
+                        subtitle: AppText(controller.users.value[position].email),
+                        leading: Icon(
+                          Icons.person,
+                          color: ColorPalettes.colorAccent,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                itemCount: controller.users.value.length),
+          ),
+        )
       ],
     );
   }

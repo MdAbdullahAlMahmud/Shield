@@ -3,6 +3,7 @@ import 'package:shield/modules/authentication/features/login/views/login_screen.
 import 'package:shield/modules/authentication/features/sign_up/views/sign_up_screen.dart';
 import 'package:shield/modules/dashboard/features/dahboard/views/dashboard_screen.dart';
 import 'package:shield/modules/messaging/features/chat/views/chat_screen.dart';
+import 'package:shield/modules/messaging/features/chat_supabase/chat_supabase_screen.dart';
 import 'package:shield/modules/messaging/features/chat_users_list/views/chat_users_list_screen.dart';
 import 'package:shield/modules/splash_screen.dart';
 import 'package:shield/router/route_path.dart';
@@ -44,6 +45,14 @@ abstract class AppRoutesList {
         name: RoutePath.chat,
         builder: (context, state) => ChatScreen(bridgeData: state.extra),
       ),
+
+      GoRoute(
+        path: RoutePath.chatSupabase,
+        name: RoutePath.chatSupabase,
+        builder: (context, state) => ChatSupabaseScreen(data: state.extra),
+      ),
+
+
     ];
   }
 }

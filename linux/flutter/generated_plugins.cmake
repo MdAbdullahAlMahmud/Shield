@@ -3,10 +3,11 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-        file_selector_linux
+  emoji_picker_flutter
+  file_selector_linux
   flutter_localization
-        flutter_secure_storage_linux
-        flutter_webrtc
+  flutter_secure_storage_linux
+  flutter_webrtc
   gtk
   url_launcher_linux
 )

@@ -1,3 +1,4 @@
+import 'package:shield/core/data/model/user.dart';
 import 'package:shield/core/exception/app_exceptions.dart';
 import 'package:shield/modules/authentication/data/repository/auth_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -23,6 +24,11 @@ class AuthRepositoryImpl extends AuthRepository {
         password: password,
         data: {"name": name},
       );
+  }
+
+  @override
+  Future<void> saveUser(UserItem user) {
+    return _client.from('users').insert(user.toJson());
   }
 
 }
