@@ -12,6 +12,8 @@ abstract class RoutePath{
   static const String chatUserList = _RoutePath._chatUserList;
   static const String chat = _RoutePath._chat;
   static const String chatSupabase = _RoutePath._chatSupabase;
+  static const String audioCall = _RoutePath._audioCall;
+  static const String videoCall = _RoutePath._videoCall;
 }
 
 
@@ -23,4 +25,6 @@ class _RoutePath{
   static const String _chatUserList = '/chatUserList';
   static const String _chat = '/chat';
   static const String _chatSupabase = '/chatSupabase';
+  static const String _audioCall = '/audioCall';
+  static const String _videoCall = '/videoCall';
 }

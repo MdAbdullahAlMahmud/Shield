@@ -32,7 +32,7 @@ class ChatUsersListController extends BaseController {
 
     AppRoutes.pushNamed(RoutePath.chatSupabase, extra: {
       "currentUserId": Supabase.instance.client.auth.currentUser!.id,
-      "chatRoomId": user.uid,
+      "chatRoomId": "0d50a180-49f3-412a-b906-d3d59596e7e1",
     });
 
   }

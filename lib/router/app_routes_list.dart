@@ -2,6 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shield/modules/authentication/features/login/views/login_screen.dart';
 import 'package:shield/modules/authentication/features/sign_up/views/sign_up_screen.dart';
 import 'package:shield/modules/dashboard/features/dahboard/views/dashboard_screen.dart';
+import 'package:shield/modules/messaging/features/call/audio_call/views/audio_call_screen.dart';
+import 'package:shield/modules/messaging/features/call/video_call/video_call_screen.dart';
 import 'package:shield/modules/messaging/features/chat/views/chat_screen.dart';
 import 'package:shield/modules/messaging/features/chat_supabase/chat_supabase_screen.dart';
 import 'package:shield/modules/messaging/features/chat_users_list/views/chat_users_list_screen.dart';
@@ -51,6 +53,23 @@ abstract class AppRoutesList {
         name: RoutePath.chatSupabase,
         builder: (context, state) => ChatSupabaseScreen(data: state.extra),
       ),
+
+      GoRoute(
+        path: RoutePath.audioCall,
+        name: RoutePath.audioCall,
+        builder: (context, state) => AudioCallScreen(data: state.extra),
+      ),
+
+      GoRoute(
+        path: RoutePath.videoCall,
+        name: RoutePath.videoCall,
+        builder: (context, state) => VideoCallScreen(data: state.extra),
+      ),
+
+
+
+
+
 
 
     ];

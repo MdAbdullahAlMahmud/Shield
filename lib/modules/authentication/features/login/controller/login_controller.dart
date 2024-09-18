@@ -33,7 +33,7 @@ class LoginController extends BaseController {
           SecureStorageService.saveToken(response.session?.accessToken ?? "");
 
           AppRoutes.pushAndReplaceNamed(
-            RoutePath.dashboard,
+            RoutePath.chatUserList,
           );
         }
         showCustomDialog(

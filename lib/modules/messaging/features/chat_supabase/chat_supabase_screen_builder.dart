@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shield/core/constants/app_spaces.dart';
 import 'package:shield/modules/messaging/data/model/message_item.dart';
+import 'package:shield/router/app_routes.dart';
+import 'package:shield/router/route_path.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -126,13 +128,20 @@ class _ChatSupabaseScreenBuilderState extends State<ChatSupabaseScreenBuilder> {
           IconButton(
             icon: Icon(Icons.video_call),
             onPressed: () {
-              // TODO: Implement video call functionality
+              AppRoutes.pushNamed(RoutePath.videoCall,extra: {
+                'chatRoomId': widget.chatRoomId,
+                'currentUserId': widget.currentUserId
+              });
             },
           ),
           IconButton(
             icon: Icon(Icons.phone),
             onPressed: () {
-              // TODO: Implement audio call functionality
+              AppRoutes.pushNamed(RoutePath.audioCall,extra: {
+                'chatRoomId': widget.chatRoomId,
+                'currentUserId': widget.currentUserId
+              });
+
             },
           ),
         ],
