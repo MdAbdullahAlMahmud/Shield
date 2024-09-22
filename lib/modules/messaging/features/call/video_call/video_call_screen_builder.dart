@@ -1,62 +1,80 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:shield/modules/messaging/data/services/call_service.dart';
+import 'package:shield/core/constants/app_spaces.dart';
+import 'package:shield/modules/messaging/features/call/video_call/widgets/call_circle_button.dart';
+import 'package:shield/modules/messaging/utils/chat_utils.dart';
+
+import 'audio_profile_view.dart';
+
+enum CallState {
+  calling,
+  ringing,
+  connected,
+}
 
 class VideoCallScreenBuilder extends StatefulWidget {
   final dynamic data;
 
-  const VideoCallScreenBuilder({super.key, this.data});
+  const VideoCallScreenBuilder({Key? key, this.data}) : super(key: key);
+
   @override
-  _VideoCallScreenBuilderState createState() => _VideoCallScreenBuilderState();
+  _VideoCallScreenState createState() => _VideoCallScreenState();
 }
 
-class _VideoCallScreenBuilderState extends State<VideoCallScreenBuilder> {
-  final RTCVideoRenderer _localRenderer = RTCVideoRenderer();
-  final RTCVideoRenderer _remoteRenderer = RTCVideoRenderer();
-  CallService _webrtcService = CallService();
+class _VideoCallScreenState extends State<VideoCallScreenBuilder>
+    with TickerProviderStateMixin {
+  bool isMuted = false;
+  bool isCameraOff = false;
+  bool isFrontCamera = true;
+  CallState callState = CallState.calling;
+
+  String? securedEmojis;
+
+  // Simulate actions with a controller
+  void toggleMute() {
+    setState(() {
+      isMuted = !isMuted;
+    });
+  }
+
+  void toggleCamera() {
+    setState(() {
+      isCameraOff = !isCameraOff;
+    });
+  }
+
+  void switchCamera() {
+    setState(() {
+      isFrontCamera = !isFrontCamera;
+    });
+  }
+
+  // Centralized colors for easy theming
+  final Color primaryColor = Colors.blueAccent;
+  final Color secondaryColor = Colors.white;
+  final Color accentColor = Colors.redAccent;
+  Timer? _timer;
+  int _callDuration = 0;
 
   @override
   void initState() {
     super.initState();
-    _initRenderers();
-    _startVideoCall();
+    securedEmojis = ChatUtils.getSecuredCallEmojis();
+    _startTimer();
   }
 
   @override
   void dispose() {
-    _localRenderer.dispose();
-    _remoteRenderer.dispose();
     super.dispose();
+    _timer?.cancel();
   }
 
-  Future<void> _initRenderers() async {
-    await _localRenderer.initialize();
-    await _remoteRenderer.initialize();
-  }
-
-  Future<void> _startVideoCall() async {
-    // Initialize local stream and set up peer connection
-    await _webrtcService.initLocalStream();
-
-    // Set the local renderer stream
-    _localRenderer.srcObject = _webrtcService.localStream;
-
-    // Create a WebRTC peer connection and add the remote stream listener
-    await _webrtcService.initializePeerConnection(
-      onRemoteStream: (MediaStream stream) {
-        setState(() {
-          _remoteRenderer.srcObject = stream;
-        });
-      },
-    );
-
-    // Create an offer and send it to the remote peer via signaling (Supabase)
-    await _webrtcService.createOffer('receiver-id');  // Replace with actual receiver ID
-  }
-
-  void _hangUp() {
-    _webrtcService.hangup();
-    Navigator.pop(context);
+  // Change call state based on user interaction or status
+  void changeCallState(CallState newState) {
+    setState(() {
+      callState = newState;
+    });
   }
 
   @override
@@ -65,39 +83,187 @@ class _VideoCallScreenBuilderState extends State<VideoCallScreenBuilder> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Remote video
+          // Show different backgrounds based on video toggle
           Positioned.fill(
-            child: RTCVideoView(_remoteRenderer),
+            child: isCameraOff ? audioCallBackground() : videoCallBackground(),
           ),
-          // Local video (small overlay)
+
+          // Call status text positioned at the top center
           Positioned(
-            right: 20,
-            top: 50,
-            child: Container(
-              width: 120,
-              height: 160,
-              child: RTCVideoView(_localRenderer, mirror: true),
-            ),
-          ),
-          // Hangup button
-          Positioned(
-            bottom: 50,
+            top: 100,
             left: 0,
             right: 0,
-            child: Center(
-              child: ElevatedButton(
-                onPressed: _hangUp,
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  padding: EdgeInsets.all(24),
-                  backgroundColor: Colors.red,
-                ),
-                child: Icon(Icons.call_end, color: Colors.white, size: 36),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              // Optional horizontal padding
+              child: Column(
+                children: [
+                  /*Text(
+                    _getCallStatusText(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),*/
+
+                  AppSpaces.spaceBetweenChild,
+                  Text(
+                    securedEmojis ?? "", // Get 4 to 5 emojis
+                    style: TextStyle(
+                      fontSize: 18, // Match the size of call status text
+                    ),
+                  ),
+
+                  AppSpaces.spaceBetweenChild,
+                  // Call Duration Text
+                  Text(
+                    _formatDuration(_callDuration),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+            ),
+          ),
+
+          // Self View (small video window if video is on)
+          if (!isCameraOff)
+            Positioned(
+              right: 20,
+              bottom: 160,
+              child: Draggable(
+                feedback: selfViewWidget(),
+                child: selfViewWidget(),
+                childWhenDragging: Container(),
+              ),
+            ),
+
+          // Control Buttons
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                controlPanel(),
+              ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  // Function to get status text based on call state
+  String _getCallStatusText() {
+    switch (callState) {
+      case CallState.calling:
+        return 'Calling...';
+      case CallState.ringing:
+        return 'Ringing...';
+      case CallState.connected:
+        return 'Connected';
+      default:
+        return '';
+    }
+  }
+
+  // Widget for the video call background (when video is on)
+  Widget videoCallBackground() {
+    return Container(
+      color: Colors.grey[900], // Simulated video background
+      child: Center(
+        child: Text(
+          'Remote Video',
+          style: TextStyle(color: secondaryColor, fontSize: 24),
+        ),
+      ),
+    );
+  }
+
+  // Widget for the audio call background (color-shifting animation)
+  Widget audioCallBackground() {
+    return AudioCallProfileView(
+      userName: "John Doe",
+      userImageUrl:
+          "https://static.remove.bg/sample-gallery/graphics/bird-thumbnail.jpg", // Replace with actual user image URL
+    );
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _callDuration++;
+      });
+    });
+  }
+
+  String _formatDuration(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secs = (seconds % 60).toString().padLeft(2, '0');
+    return '$minutes:$secs';
+  }
+
+  // Self-view widget (small camera view)
+  Widget selfViewWidget() {
+    return Container(
+      width: 120,
+      height: 160,
+      decoration: BoxDecoration(
+        color: Colors.black26,
+        border: Border.all(color: Colors.white54),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Center(
+        child: Text(
+          isCameraOff ? 'Camera Off' : 'Your Video',
+          style: TextStyle(color: secondaryColor),
+        ),
+      ),
+    );
+  }
+
+  // Control panel at the bottom
+  Widget controlPanel() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // Mute Button
+        CircleButton(
+          icon: Icons.mic_off,
+          onPressed: toggleMute,
+          color: isMuted ? accentColor : primaryColor,
+        ),
+
+        // Camera Toggle Button
+        CircleButton(
+          icon: Icons.videocam_off,
+          onPressed: toggleCamera,
+          color: isCameraOff ? accentColor : primaryColor,
+        ),
+
+        // Switch Camera Button
+        CircleButton(
+          icon: Icons.cameraswitch,
+          onPressed: switchCamera,
+          color: primaryColor,
+        ),
+
+        // End Call Button
+        CircleButton(
+          icon: Icons.call_end,
+          onPressed: () {
+            // Simulate ending the call
+            Navigator.pop(context);
+          },
+          color: accentColor,
+        ),
+      ],
     );
   }
 }
